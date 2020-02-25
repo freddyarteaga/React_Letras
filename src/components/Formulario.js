@@ -1,11 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Formulario = () => {
+
+    const [busqueda, guardarBusqueda] = useState({
+        artista : '',
+        cancion : ''
+    })
+
+    const [error, guardarError] = useState(false)
+
+    const { artista, cancion } = busqueda
+
+    // funcion a cada input para leer su contenido
+    const actualizarState = e => {
+        guardarBusqueda({
+            ...busqueda,
+            [e.target.name] : e.target.value
+        })
+    }
+
+    // consultar las apis
+
+    const consultarInformacion = e => {
+        e.prevent.Default()
+
+        if(artista.trim() === '' || cancion.trim() === ''){
+            guardarError(true)
+            return
+        }
+        guardarError(false)
+
+        // todo bien, pasar al componente principal
+    }
+
     return ( 
         <div className='bg-info'>
             <div className='container'>
                 <div className='row'>
                     <form
+                    onSubmit={consultarInformacion}
                         className='col card text-white bg-transparent mb-5 pt-5 bg-2'
                     >
                         <fieldset>
@@ -18,6 +51,8 @@ const Formulario = () => {
                                         className='form-control'
                                         name='artista'
                                         placeholder='Nombre Artista'
+                                        onChange={actualizarState}
+                                        value={artista}
                                     ></input>
                                     </div>
                                 </div>
@@ -26,8 +61,10 @@ const Formulario = () => {
                                         <label>Cancion</label>
                                         <input  type='text'
                                         className='form-control'
-                                        name='arcanciontista'
+                                        name='cancion'
                                         placeholder='Nombre Cancion'
+                                        onChange={actualizarState}
+                                        value={cancion}
                                     ></input>
                                     </div>
                                 </div>
